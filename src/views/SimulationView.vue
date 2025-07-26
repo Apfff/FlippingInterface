@@ -6,9 +6,12 @@ import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useFileStore } from '@/stores/file'
 import graphProblemExample from 'input.json'
+import { useSettingsStore } from '@/stores/settings'
 
 const fileStore = useFileStore()
 const { graphProblemObj } = storeToRefs(fileStore)
+const settingsStore = useSettingsStore()
+const { showTargetOverlap } = storeToRefs(settingsStore)
 </script>
 
 <template>
@@ -25,7 +28,13 @@ const { graphProblemObj } = storeToRefs(fileStore)
     <div class="graph-problem-content">
       <SimulationRender v-if="graphProblemObj" :graph-problem="graphProblemObj" />
       <div class="no-graph" v-else>No graph problem loaded</div>
-      <History v-if="graphProblemObj" />
+      <div class="graph-information" v-if="graphProblemObj">
+        <History />
+        <div class="show-overlap">
+          <input class="show-overlap-checkbox" type="checkbox" v-model="showTargetOverlap" />
+          show overlap
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -67,5 +76,32 @@ const { graphProblemObj } = storeToRefs(fileStore)
   text-align: center;
   color: var(--color-text-secondary);
   font-size: var(--fs-m);
+}
+.graph-information {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-left: var(--s-l);
+}
+.show-overlap {
+  display: flex;
+  align-items: center;
+  gap: var(--s-l);
+  margin-top: auto;
+  user-select: none;
+  padding: var(--s-l);
+}
+.show-overlap-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--c-bg);
+  border: 2px solid var(--c-text);
+  border-radius: 3px;
+  cursor: pointer;
+}
+.show-overlap-checkbox:checked {
+  background-color: var(--c-text);
 }
 </style>
