@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import SimulationRender from '@/components/SimulationRender.vue'
 import History from '@/components/History.vue'
-import type { CyElementsArray, GraphProblem } from '@/types'
-import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useFileStore } from '@/stores/file'
-import graphProblemExample from 'input.json'
 import { useSettingsStore } from '@/stores/settings'
 
 const fileStore = useFileStore()
