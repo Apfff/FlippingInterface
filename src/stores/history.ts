@@ -74,5 +74,14 @@ export const useHistoryStore = defineStore('history', () => {
     currentStep.value = 0
   }
 
-  return { step, makeStep, addedEdges, removedEdges, currentStep, undo, redo, importHistory }
+  return {
+    step,
+    makeStep,
+    addedEdges,
+    removedEdges,
+    currentStep,
+    undo,
+    redo,
+    importHistory,
+  }
 })

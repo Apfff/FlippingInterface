@@ -29,9 +29,6 @@ const { addedEdges, removedEdges, step, currentStep } = storeToRefs(historyStore
 </template>
 
 <style scoped lang="scss">
-.history {
-  padding: var(--s-l);
-}
 .history-lists {
   display: grid;
   grid-template-columns: 1fr 1fr;

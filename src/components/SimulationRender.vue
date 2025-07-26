@@ -7,6 +7,7 @@ import { cyConfig } from '@/configs'
 import { storeToRefs } from 'pinia'
 import { useGraphStore } from '@/stores/graph'
 import { GraphService } from '@/services/GraphService'
+import { useSettingsStore } from '@/stores/settings'
 
 interface Props {
   graphProblem: GraphProblem
@@ -18,6 +19,8 @@ const { previewTarget, targetEdges, currentEdges } = storeToRefs(graphStore)
 const historyStore = useHistoryStore()
 const { addedEdges, removedEdges, step, currentStep } = storeToRefs(historyStore)
 const graphService = new GraphService()
+const settingsStore = useSettingsStore()
+const { showTargetOverlap } = storeToRefs(settingsStore)
 
 //bootstrapping the graph
 const graphProblemWithIDs = graphService.graphProblemGenerateIds(props.graphProblem)
@@ -79,6 +82,12 @@ onMounted(() => {
         selector: 'edge.flip-edge-new',
         style: {
           'line-color': cyConfig.edgeColorNew,
+        },
+      },
+      {
+        selector: 'edge.correct',
+        style: {
+          'line-color': cyConfig.edgeColorCorrect,
         },
       },
     ],
@@ -166,6 +175,15 @@ onMounted(() => {
       if (!cy) return
       currentEdges.value = graphService.extractEdgeData(cy)
       graphService.changeEdgeData(cy, targetEdges.value)
+      if (showTargetOverlap.value) {
+        const overlapEdgesIDs = graphStore.getTargetCurrentOverlap()
+        for (const edgeId of overlapEdgesIDs) {
+          const cyEdge = cy.getElementById(edgeId)
+          if (cyEdge) {
+            cyEdge.addClass('correct')
+          }
+        }
+      }
     }
   }
   keyReleaseHandler = (event: KeyboardEvent) => {
@@ -173,6 +191,7 @@ onMounted(() => {
       event.preventDefault()
       if (cy) {
         graphService.changeEdgeData(cy, currentEdges.value)
+        cy.edges().removeClass('correct')
       }
       previewTarget.value = false
     }

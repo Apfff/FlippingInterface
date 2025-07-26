@@ -7,6 +7,7 @@ export const cyConfig = {
   edgeColorValid: '#2ECC40',
   edgeColorNeighbor: '#999999',
   edgeColorNew: '#358dda',
+  edgeColorCorrect: '#d3c260',
   edgeWidth: 2,
   wheelSensitivity: 1.0,
   layout: {
