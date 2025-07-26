@@ -48,7 +48,7 @@ onMounted(() => {
           color: cyConfig.textColor,
           'text-valign': 'center',
           'text-halign': 'center',
-          'font-size': '6px',
+          'font-size': cyConfig.fontSize,
           events: 'yes',
         },
       },
