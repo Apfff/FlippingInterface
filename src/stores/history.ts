@@ -21,7 +21,6 @@ export const useHistoryStore = defineStore('history', () => {
 
   function undo(cy: cytoscape.Core) {
     if (currentStep.value === 0) return
-    console.log('undo', currentStep.value, step.value)
     const addedEdgeData = addedEdges.value[currentStep.value - 1]
     const removedEdgeData = removedEdges.value[currentStep.value - 1]
     cy.batch(() => {
@@ -39,7 +38,6 @@ export const useHistoryStore = defineStore('history', () => {
 
   function redo(cy: cytoscape.Core) {
     if (currentStep.value === step.value) return
-    console.log('redo', currentStep.value, step.value)
     const addedEdgeData = addedEdges.value[currentStep.value]
     const removedEdgeData = removedEdges.value[currentStep.value]
     cy.batch(() => {
