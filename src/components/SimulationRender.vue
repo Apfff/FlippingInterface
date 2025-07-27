@@ -17,7 +17,7 @@ const props = defineProps<Props>()
 const graphStore = useGraphStore()
 const { previewTarget, targetEdges, currentEdges } = storeToRefs(graphStore)
 const historyStore = useHistoryStore()
-const { addedEdges, removedEdges, step, currentStep, highlightedNodes } = storeToRefs(historyStore)
+const { highlightedNodes, highlightedEdges } = storeToRefs(historyStore)
 const graphService = new GraphService()
 const settingsStore = useSettingsStore()
 const { showTargetOverlap } = storeToRefs(settingsStore)
@@ -48,7 +48,7 @@ onMounted(() => {
           color: cyConfig.textColor,
           'text-valign': 'center',
           'text-halign': 'center',
-          'font-size': cyConfig.fontSize,
+          'font-size': `${cyConfig.fontSize}px`,
           events: 'yes',
         },
       },
@@ -64,6 +64,12 @@ onMounted(() => {
           width: cyConfig.edgeWidth,
           'line-color': cyConfig.edgeColor,
           events: 'yes',
+        },
+      },
+      {
+        selector: 'edge.highlighted',
+        style: {
+          'line-color': cyConfig.nodeColorHighlighted,
         },
       },
       {
@@ -169,6 +175,10 @@ onMounted(() => {
       if (!cy) return
       currentEdges.value = graphService.extractEdgeData(cy)
       graphService.changeEdgeData(cy, targetEdges.value)
+      //highlighted edges
+      highlightedEdges.value.forEach((edgeId) => {
+        cy!.getElementById(edgeId)?.addClass('highlighted')
+      })
       if (showTargetOverlap.value) {
         const overlapEdgesIDs = graphStore.getTargetCurrentOverlap()
         for (const edgeId of overlapEdgesIDs) {
@@ -186,6 +196,9 @@ onMounted(() => {
       if (cy) {
         graphService.changeEdgeData(cy, currentEdges.value)
         cy.edges().removeClass('correct')
+        highlightedEdges.value.forEach((edgeId) => {
+          cy!.getElementById(edgeId)?.addClass('highlighted')
+        })
       }
       previewTarget.value = false
     }
@@ -222,11 +235,17 @@ watch(previewTarget, (newValue) => {
   }
 })
 watch(highlightedNodes, (nodes) => {
-  console.log('highlightedNodes:', highlightedNodes.value)
   if (!cy) return
   cy.nodes().removeClass('highlighted')
   nodes.forEach((nodeId) => {
     cy!.getElementById(nodeId).addClass('highlighted')
+  })
+})
+watch(highlightedEdges, (edges) => {
+  if (!cy) return
+  cy.edges().removeClass('highlighted')
+  edges.forEach((edgeId) => {
+    cy!.getElementById(edgeId).addClass('highlighted')
   })
 })
 </script>

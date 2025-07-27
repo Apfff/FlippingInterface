@@ -9,6 +9,7 @@ export const useHistoryStore = defineStore('history', () => {
   const removedEdges = ref<EdgeData[]>([])
   //hacky
   const highlightedNodes = ref<string[]>([])
+  const highlightedEdges = ref<string[]>([])
 
   function makeStep(newEdge: EdgeData, removedEdge: EdgeData) {
     if (currentStep.value < step.value) {
@@ -84,5 +85,6 @@ export const useHistoryStore = defineStore('history', () => {
     redo,
     importHistory,
     highlightedNodes,
+    highlightedEdges,
   }
 })

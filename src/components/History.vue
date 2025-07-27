@@ -3,15 +3,18 @@ import { useHistoryStore } from '@/stores/history'
 import { storeToRefs } from 'pinia'
 
 const historyStore = useHistoryStore()
-const { addedEdges, removedEdges, step, currentStep, highlightedNodes } = storeToRefs(historyStore)
+const { addedEdges, removedEdges, step, currentStep, highlightedNodes, highlightedEdges } =
+  storeToRefs(historyStore)
 
-const highlightPair = (nodeId1: string, nodeId2: string) => {
-  const index1 = highlightedNodes.value.indexOf(nodeId1)
-  const index2 = highlightedNodes.value.indexOf(nodeId2)
-  if (index1 != -1 && index2 != -1) {
+const highlightPair = (nodeId1: string, nodeId2: string, edgeId: string) => {
+  const nodeIndex1 = highlightedNodes.value.indexOf(nodeId1)
+  const nodeIndex2 = highlightedNodes.value.indexOf(nodeId2)
+  if (nodeIndex1 != -1 && nodeIndex2 != -1) {
     highlightedNodes.value = []
+    highlightedEdges.value = []
   } else {
     highlightedNodes.value = [nodeId1, nodeId2]
+    highlightedEdges.value = [edgeId]
   }
 }
 
@@ -22,6 +25,7 @@ const edgeTitle = (edge: { source: string; target: string }) => {
 
 <template>
   <div class="history">
+    {{ highlightedEdges }}
     <div class="step">Step: {{ currentStep }}</div>
     <div class="history-lists">
       <div class="list removed-edges">
@@ -34,7 +38,7 @@ const edgeTitle = (edge: { source: string; target: string }) => {
                 highlighted:
                   highlightedNodes.includes(edge.source) && highlightedNodes.includes(edge.target),
               }"
-              @click="highlightPair(edge.source, edge.target)"
+              @click="highlightPair(edge.source, edge.target, edge.id!)"
             >
               {{ edgeTitle(edge) }}
             </div>
@@ -51,7 +55,7 @@ const edgeTitle = (edge: { source: string; target: string }) => {
                 highlighted:
                   highlightedNodes.includes(edge.source) && highlightedNodes.includes(edge.target),
               }"
-              @click="highlightPair(edge.source, edge.target)"
+              @click="highlightPair(edge.source, edge.target, edge.id!)"
             >
               {{ edgeTitle(edge) }}
             </div>

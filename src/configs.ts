@@ -1,9 +1,10 @@
 export const cyConfig = {
   nodeColor: '#c9c9c9',
-  nodeColorHighlighted: '#ffd256',
+  nodeColorHighlighted: '#dd56ff',
+  borderWidth: 2,
   textColor: '#000000',
   nodeSize: 10,
-  fontSize: '6px',
+  fontSize: 6,
   edgeColor: '#4a4a4a',
   edgeColorInvalid: '#FF4136',
   edgeColorValid: '#2ECC40',

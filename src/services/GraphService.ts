@@ -14,7 +14,7 @@ export class GraphService {
     const commonNeighbors = this.getRelevantNeighbors(cy, edgeID)
     const neighbor1 = commonNeighbors[0]
     const neighbor2 = commonNeighbors[1]
-    const newEdgeId = `${neighbor1.id()}${neighbor2.id()}`
+    const newEdgeId = this.getNormalizedEdgeId(neighbor1.id(), neighbor2.id())
     //data for history
     const newEdgeData: EdgeData = {
       id: newEdgeId,
@@ -94,22 +94,26 @@ export class GraphService {
   public graphProblemGenerateIds(graphProblem: GraphProblem): GraphProblem {
     graphProblem.startEdges.forEach((edge) => {
       if (!edge.id) {
-        edge.id = `${edge.source}${edge.target}`
+        edge.id = this.getNormalizedEdgeId(edge.source, edge.target)
       }
     })
     graphProblem.targetEdges.forEach((edge) => {
       if (!edge.id) {
-        edge.id = `${edge.source}${edge.target}`
+        edge.id = this.getNormalizedEdgeId(edge.source, edge.target)
       }
     })
     graphProblem.steps.forEach((step) => {
       if (!step.added.id) {
-        step.added.id = `${step.added.source}${step.added.target}`
+        step.added.id = this.getNormalizedEdgeId(step.added.source, step.added.target)
       }
       if (!step.removed.id) {
-        step.removed.id = `${step.removed.source}${step.removed.target}`
+        step.removed.id = this.getNormalizedEdgeId(step.removed.source, step.removed.target)
       }
     })
     return graphProblem
+  }
+
+  public getNormalizedEdgeId(source: string, target: string): string {
+    return source < target ? `${source}${target}` : `${target}${source}`
   }
 }
