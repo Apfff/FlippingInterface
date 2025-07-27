@@ -17,7 +17,7 @@ const props = defineProps<Props>()
 const graphStore = useGraphStore()
 const { previewTarget, targetEdges, currentEdges } = storeToRefs(graphStore)
 const historyStore = useHistoryStore()
-const { addedEdges, removedEdges, step, currentStep } = storeToRefs(historyStore)
+const { addedEdges, removedEdges, step, currentStep, highlightedNodes } = storeToRefs(historyStore)
 const graphService = new GraphService()
 const settingsStore = useSettingsStore()
 const { showTargetOverlap } = storeToRefs(settingsStore)
@@ -50,6 +50,12 @@ onMounted(() => {
           'text-halign': 'center',
           'font-size': cyConfig.fontSize,
           events: 'yes',
+        },
+      },
+      {
+        selector: 'node.highlighted',
+        style: {
+          'background-color': cyConfig.nodeColorHighlighted,
         },
       },
       {
@@ -138,18 +144,6 @@ onMounted(() => {
     }
   })
 
-  watch(previewTarget, (newValue) => {
-    if (!cy) return
-    if (newValue) {
-      cy.edges().unselectify()
-      cy.edges().unselect()
-      cy.style().selector('edge').style('events', 'no').update()
-    } else {
-      cy.edges().selectify()
-      cy.style().selector('edge').style('events', 'yes').update()
-    }
-  })
-
   keyPressHandler = (event: KeyboardEvent) => {
     if (event.code === 'Space') {
       event.preventDefault()
@@ -214,6 +208,26 @@ onBeforeUnmount(() => {
     cy.destroy()
     cy = null
   }
+})
+
+watch(previewTarget, (newValue) => {
+  if (!cy) return
+  if (newValue) {
+    cy.edges().unselectify()
+    cy.edges().unselect()
+    cy.style().selector('edge').style('events', 'no').update()
+  } else {
+    cy.edges().selectify()
+    cy.style().selector('edge').style('events', 'yes').update()
+  }
+})
+watch(highlightedNodes, (nodes) => {
+  console.log('highlightedNodes:', highlightedNodes.value)
+  if (!cy) return
+  cy.nodes().removeClass('highlighted')
+  nodes.forEach((nodeId) => {
+    cy!.getElementById(nodeId).addClass('highlighted')
+  })
 })
 </script>
 

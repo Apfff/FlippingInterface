@@ -3,7 +3,17 @@ import { useHistoryStore } from '@/stores/history'
 import { storeToRefs } from 'pinia'
 
 const historyStore = useHistoryStore()
-const { addedEdges, removedEdges, step, currentStep } = storeToRefs(historyStore)
+const { addedEdges, removedEdges, step, currentStep, highlightedNodes } = storeToRefs(historyStore)
+
+const highlightPair = (nodeId1: string, nodeId2: string) => {
+  const index1 = highlightedNodes.value.indexOf(nodeId1)
+  const index2 = highlightedNodes.value.indexOf(nodeId2)
+  if (index1 != -1 && index2 != -1) {
+    highlightedNodes.value = []
+  } else {
+    highlightedNodes.value = [nodeId1, nodeId2]
+  }
+}
 
 const edgeTitle = (edge: { source: string; target: string }) => {
   return `${edge.source}:${edge.target}`
@@ -17,14 +27,34 @@ const edgeTitle = (edge: { source: string; target: string }) => {
       <div class="list removed-edges">
         <div v-if="removedEdges.length > 0">
           <div v-for="(edge, index) in removedEdges" :key="edge.id">
-            <div :class="{ current: index === currentStep - 1 }">{{ edgeTitle(edge) }}</div>
+            <div
+              class="edge-entry"
+              :class="{
+                current: index === currentStep - 1,
+                highlighted:
+                  highlightedNodes.includes(edge.source) && highlightedNodes.includes(edge.target),
+              }"
+              @click="highlightPair(edge.source, edge.target)"
+            >
+              {{ edgeTitle(edge) }}
+            </div>
           </div>
         </div>
       </div>
       <div class="list added-edges">
         <div v-if="addedEdges.length > 0">
           <div v-for="(edge, index) in addedEdges" :key="edge.id">
-            <div :class="{ current: index === currentStep - 1 }">{{ edgeTitle(edge) }}</div>
+            <div
+              class="edge-entry"
+              :class="{
+                current: index === currentStep - 1,
+                highlighted:
+                  highlightedNodes.includes(edge.source) && highlightedNodes.includes(edge.target),
+              }"
+              @click="highlightPair(edge.source, edge.target)"
+            >
+              {{ edgeTitle(edge) }}
+            </div>
           </div>
         </div>
       </div>
@@ -63,5 +93,13 @@ const edgeTitle = (edge: { source: string; target: string }) => {
 }
 .step {
   text-align: center;
+}
+.edge-entry {
+  border-radius: 3px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+.highlighted {
+  border: 2px solid #ffd256;
 }
 </style>
