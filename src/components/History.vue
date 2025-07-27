@@ -4,6 +4,10 @@ import { storeToRefs } from 'pinia'
 
 const historyStore = useHistoryStore()
 const { addedEdges, removedEdges, step, currentStep } = storeToRefs(historyStore)
+
+const edgeTitle = (edge: { source: string; target: string }) => {
+  return `${edge.source}:${edge.target}`
+}
 </script>
 
 <template>
@@ -13,14 +17,14 @@ const { addedEdges, removedEdges, step, currentStep } = storeToRefs(historyStore
       <div class="list removed-edges">
         <div v-if="removedEdges.length > 0">
           <div v-for="(edge, index) in removedEdges" :key="edge.id">
-            <div :class="{ current: index === currentStep - 1 }">{{ edge.id }}</div>
+            <div :class="{ current: index === currentStep - 1 }">{{ edgeTitle(edge) }}</div>
           </div>
         </div>
       </div>
       <div class="list added-edges">
         <div v-if="addedEdges.length > 0">
           <div v-for="(edge, index) in addedEdges" :key="edge.id">
-            <div :class="{ current: index === currentStep - 1 }">{{ edge.id }}</div>
+            <div :class="{ current: index === currentStep - 1 }">{{ edgeTitle(edge) }}</div>
           </div>
         </div>
       </div>
