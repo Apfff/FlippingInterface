@@ -1,4 +1,4 @@
-## How-To
+## How-To-Use
 
 Graph:  
 Move graph -> click and drag graph  
