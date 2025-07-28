@@ -6,6 +6,8 @@ import type { GraphProblem } from './types'
 import { useFileStore } from './stores/file'
 import { storeToRefs } from 'pinia'
 
+document.title = 'Flipping Interface'
+
 const router = useRouter()
 const importCounter = ref(0)
 const fileInput = ref<HTMLInputElement | null>(null)
