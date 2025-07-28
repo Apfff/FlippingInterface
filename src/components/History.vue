@@ -25,7 +25,6 @@ const edgeTitle = (edge: { source: string; target: string }) => {
 
 <template>
   <div class="history">
-    {{ highlightedEdges }}
     <div class="step">Step: {{ currentStep }}</div>
     <div class="history-lists">
       <div class="list removed-edges">
@@ -104,6 +103,6 @@ const edgeTitle = (edge: { source: string; target: string }) => {
   cursor: pointer;
 }
 .highlighted {
-  border: 2px solid #ffd256;
+  border: 2px solid #ffc444ff;
 }
 </style>

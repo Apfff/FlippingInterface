@@ -1,6 +1,5 @@
-import { useGraphStore } from '@/stores/graph'
 import type { CyElement, CyElements, CyElementsArray, EdgeData, GraphProblem } from '@/types'
-import { storeToRefs } from 'pinia'
+import { appConfig } from '@/configs'
 
 export class GraphService {
   public flipEdge(
@@ -93,20 +92,20 @@ export class GraphService {
 
   public graphProblemGenerateIds(graphProblem: GraphProblem): GraphProblem {
     graphProblem.startEdges.forEach((edge) => {
-      if (!edge.id) {
+      if (!edge.id || appConfig.forceGenericIds) {
         edge.id = this.getNormalizedEdgeId(edge.source, edge.target)
       }
     })
     graphProblem.targetEdges.forEach((edge) => {
-      if (!edge.id) {
+      if (!edge.id || appConfig.forceGenericIds) {
         edge.id = this.getNormalizedEdgeId(edge.source, edge.target)
       }
     })
     graphProblem.steps.forEach((step) => {
-      if (!step.added.id) {
+      if (!step.added.id || appConfig.forceGenericIds) {
         step.added.id = this.getNormalizedEdgeId(step.added.source, step.added.target)
       }
-      if (!step.removed.id) {
+      if (!step.removed.id || appConfig.forceGenericIds) {
         step.removed.id = this.getNormalizedEdgeId(step.removed.source, step.removed.target)
       }
     })

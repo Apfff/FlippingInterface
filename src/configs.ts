@@ -32,3 +32,7 @@ export const cyConfig = {
     minTemp: 1.0,
   },
 }
+
+export const appConfig = {
+  forceGenericIds: true,
+}
