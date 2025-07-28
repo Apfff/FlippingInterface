@@ -1,6 +1,6 @@
 ## How-To
 
-Graph:
+Graph:  
 Move node -> click and drag node  
 Select edge -> click edge  
 Flip selected edge -> [space]  
