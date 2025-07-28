@@ -34,5 +34,5 @@ export const cyConfig = {
 }
 
 export const appConfig = {
-  forceGenericIds: true,
+  forceGenericIds: true, //'true' recommended
 }
