@@ -12,6 +12,9 @@ Move through steps: [LeftArrow] / [RightArrow]
 Highlight nodes/edge: click edge in Steps-History  
 Show overlap (with targert graph): toggle "show overlap"  
 
+## Example Files
+Example files in `/public`
+
 ## Project Setup
 
 ```sh
