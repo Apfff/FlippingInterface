@@ -83,7 +83,6 @@ header {
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  padding: var(--s-xl);
 }
 .buttons {
   display: flex;
