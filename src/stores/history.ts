@@ -30,11 +30,14 @@ export const useHistoryStore = defineStore('history', () => {
       cy.edges().unselect()
       cy.edges().removeClass('flip-edge-new')
       cy.getElementById(addedEdgeData.id!).remove()
-      cy.add({
+      const newEdge = cy.add({
         group: 'edges',
         data: removedEdgeData,
         classes: 'flip-edge-new',
       })
+      if (highlightedEdges.value.includes(removedEdgeData.id!)) {
+        newEdge.addClass('highlighted')
+      }
     })
     currentStep.value -= 1
   }
@@ -47,11 +50,14 @@ export const useHistoryStore = defineStore('history', () => {
       cy.edges().unselect()
       cy.edges().removeClass('flip-edge-new')
       cy.getElementById(removedEdgeData.id!).remove()
-      cy.add({
+      const newEdge = cy.add({
         group: 'edges',
         data: addedEdgeData,
         classes: 'flip-edge-new',
       })
+      if (highlightedEdges.value.includes(addedEdgeData.id!)) {
+        newEdge.addClass('highlighted')
+      }
     })
     currentStep.value += 1
   }
