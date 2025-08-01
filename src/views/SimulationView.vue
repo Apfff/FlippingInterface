@@ -39,6 +39,10 @@ const { showTargetOverlap } = storeToRefs(settingsStore)
 <style>
 .simulation {
   padding: var(--s-xl) 8%;
+  height: calc(100vh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--header-height);
 }
 .graph-problem-name {
   text-align: center;
@@ -63,7 +67,8 @@ const { showTargetOverlap } = storeToRefs(settingsStore)
 .graph-problem-content {
   display: grid;
   grid-template-columns: auto 10em;
-  min-height: 80vh;
+  flex: 1;
+  min-height: 70vh;
 }
 .no-graph {
   grid-column: 1 / -1;
