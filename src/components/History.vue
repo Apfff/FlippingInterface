@@ -101,6 +101,7 @@ const edgeTitle = (edge: { source: string; target: string }) => {
   border-radius: 3px;
   border: 2px solid transparent;
   cursor: pointer;
+  user-select: none;
 }
 .highlighted {
   border: 2px solid #ffc444ff;
