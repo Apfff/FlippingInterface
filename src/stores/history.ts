@@ -67,12 +67,12 @@ export const useHistoryStore = defineStore('history', () => {
     removedEdges.value = []
     history.forEach((step) => {
       addedEdges.value.push({
-        id: step.added.id,
+        id: `${step.added.source}${step.added.target}`,
         source: step.added.source,
         target: step.added.target,
       })
       removedEdges.value.push({
-        id: step.removed.id,
+        id: `${step.removed.source}${step.removed.target}`,
         source: step.removed.source,
         target: step.removed.target,
       })
