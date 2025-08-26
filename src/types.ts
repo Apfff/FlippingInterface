@@ -1,3 +1,5 @@
+import type { Position } from 'cytoscape'
+
 export interface EdgeData {
   id?: string
   source: string
@@ -5,6 +7,8 @@ export interface EdgeData {
 }
 export interface NodeData {
   id: string
+  x: number
+  y: number
 }
 
 export interface Step {
@@ -22,6 +26,7 @@ export interface GraphProblem {
 
 export interface CyNodeElement {
   data: NodeData
+  position: Position
   group?: 'nodes'
   classes?: string
 }

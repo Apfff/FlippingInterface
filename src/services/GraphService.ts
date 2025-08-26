@@ -1,5 +1,6 @@
 import type { CyElement, CyElements, CyElementsArray, EdgeData, GraphProblem } from '@/types'
 import { appConfig } from '@/configs'
+import type { Position } from 'cytoscape'
 
 export class GraphService {
   public flipEdge(
@@ -10,7 +11,7 @@ export class GraphService {
       return
     }
     const oldEdge = cy.getElementById(edgeID)
-    const commonNeighbors = this.getRelevantNeighbors(cy, edgeID)
+    const commonNeighbors = this.getNeighborNodes(cy, edgeID)
     const neighbor1 = commonNeighbors[0]
     const neighbor2 = commonNeighbors[1]
     const newEdgeId = this.getNormalizedEdgeId(neighbor1.id(), neighbor2.id())
@@ -38,7 +39,7 @@ export class GraphService {
     return { oldEdge: oldEdgeData, newEdge: newEdgeData }
   }
 
-  public getRelevantNeighbors(cy: cytoscape.Core, edgeID: string) {
+  public getNeighborNodes(cy: cytoscape.Core, edgeID: string) {
     const edge = cy.getElementById(edgeID)
     const nodes = edge.connectedNodes()
     const node1 = nodes[0]
@@ -48,6 +49,28 @@ export class GraphService {
     const neighbors2 = node2.neighborhood('node')
     const commonNeighbors = neighbors1.intersection(neighbors2)
     return commonNeighbors
+  }
+
+  public isWithinConvexHull(edge: [Position, Position], node1: Position, node2: Position): boolean {
+    const edgeSourcePos = edge[0]
+    const edgeTargetPos = edge[1]
+    const edgeVector: Position = {
+      x: edgeTargetPos.x - edgeSourcePos.x,
+      y: edgeTargetPos.y - edgeSourcePos.y,
+    }
+    const node1Vector: Position = {
+      x: node1.x - edgeTargetPos.x,
+      y: node1.y - edgeTargetPos.y,
+    }
+    const node2Vector: Position = {
+      x: node2.x - edgeTargetPos.x,
+      y: node2.y - edgeTargetPos.y,
+    }
+    const cross1 = edgeVector.x * node1Vector.y - edgeVector.y * node1Vector.x
+    const cross2 = edgeVector.x * node2Vector.y - edgeVector.y * node2Vector.x
+    const sign1 = Math.sign(cross1)
+    const sign2 = Math.sign(cross2)
+    return sign1 !== 0 && sign2 !== 0 && sign1 !== sign2
   }
 
   public extractEdgeData(cy: cytoscape.Core): EdgeData[] {
@@ -79,7 +102,8 @@ export class GraphService {
     const elements: CyElementsArray = []
     graphProblem.nodes.forEach((nodeData) => {
       elements.push({
-        data: nodeData,
+        data: { id: nodeData.id },
+        position: { x: nodeData.x, y: nodeData.y },
       } as CyElement)
     })
     graphProblem.startEdges.forEach((edgeData) => {

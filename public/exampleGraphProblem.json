@@ -1,0 +1,52 @@
+{
+  "name": "Hexagon Triangulation Example",
+  "nodes": [
+    { "id": "a", "x": 200, "y": 100 },
+    { "id": "b", "x": 300, "y": 200 },
+    { "id": "c", "x": 200, "y": 300 },
+    { "id": "d", "x": 100, "y": 300 },
+    { "id": "e", "x": 50, "y": 200 },
+    { "id": "f", "x": 100, "y": 100 },
+    { "id": "g", "x": 300, "y": 50 }
+  ],
+  "startEdges": [
+    { "source": "a", "target": "b" },
+    { "source": "b", "target": "c" },
+    { "source": "c", "target": "d" },
+    { "source": "d", "target": "e" },
+    { "source": "e", "target": "f" },
+    { "source": "f", "target": "a" },
+    { "source": "a", "target": "c" },
+    { "source": "a", "target": "d" },
+    { "source": "a", "target": "e" },
+    { "source": "a", "target": "g" },
+    { "source": "f", "target": "g" }
+  ],
+  "targetEdges": [
+    { "source": "a", "target": "b" },
+    { "source": "b", "target": "c" },
+    { "source": "c", "target": "d" },
+    { "source": "d", "target": "e" },
+    { "source": "e", "target": "f" },
+    { "source": "f", "target": "a" },
+    { "source": "a", "target": "c" },
+    { "source": "c", "target": "e" },
+    { "source": "c", "target": "f" },
+    { "source": "a", "target": "g" },
+    { "source": "f", "target": "g" }
+  ],
+  "steps": [
+    {
+      "added": { "source": "b", "target": "d" },
+      "removed": { "source": "a", "target": "c" }
+    },
+    {
+      "added": { "source": "e", "target": "b" },
+      "removed": { "source": "a", "target": "d" }
+    },
+    {
+      "added": { "source": "f", "target": "b" },
+      "removed": { "source": "a", "target": "e" }
+    }
+  ]
+}

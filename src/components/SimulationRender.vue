@@ -103,7 +103,9 @@ onMounted(() => {
         },
       },
     ],
-    layout: cyConfig.layout,
+    layout: {
+      name: 'preset',
+    },
     userZoomingEnabled: true,
     userPanningEnabled: true,
     boxSelectionEnabled: true,
@@ -111,17 +113,33 @@ onMounted(() => {
     motionBlur: false,
     wheelSensitivity: cyConfig.wheelSensitivity,
   })
+  cy.nodes().ungrabify()
 
   cy.on('select', 'edge', (event) => {
     if (!cy) return
     cy.edges().removeClass('flip-edge-new')
     const edge = event.target
-    const commonNeighbors = graphService.getRelevantNeighbors(cy, edge.id())
+    const commonNeighbors = graphService.getNeighborNodes(cy, edge.id())
     if (commonNeighbors.length < 2) {
       edge.addClass('flip-edge-invalid')
     } else if (commonNeighbors.length == 2) {
-      edgeFlipCandidateID.value = edge.id()
-      edge.addClass('flip-edge-valid')
+      if (
+        //pre flip check
+        graphService.isWithinConvexHull(
+          [edge.source().position(), edge.target().position()],
+          commonNeighbors[0].position(),
+          commonNeighbors[1].position(),
+        ) &&
+        //post flip check
+        graphService.isWithinConvexHull(
+          [commonNeighbors[0].position(), commonNeighbors[1].position()],
+          edge.source().position(),
+          edge.target().position(),
+        )
+      ) {
+        edge.addClass('flip-edge-valid')
+        edgeFlipCandidateID.value = edge.id()
+      } else edge.addClass('flip-edge-invalid')
     } else {
       console.error('Unexpected number of common neighbors:', commonNeighbors.length)
     }
