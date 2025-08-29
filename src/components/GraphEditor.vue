@@ -38,7 +38,6 @@ function renameNodesToAlphabeticalOrder() {
   if (!cy) return
   // Get all nodes and sort them by their current IDs
   const allNodes = cy.nodes().sort((a, b) => a.id().localeCompare(b.id()))
-  // Store node positions and edge data before removing
   const nodePositions = new Map<string, any>()
   const edgeData: Array<{ source: string; target: string }> = []
   allNodes.forEach((node) => {
