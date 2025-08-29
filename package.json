@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
-    "build-only": "NODE_ENV=production vite build",
+    "build-only": "vite build --mode production",
     "type-check": "vue-tsc --build",
     "format": "prettier --write src/"
   },
