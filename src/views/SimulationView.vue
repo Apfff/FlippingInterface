@@ -4,18 +4,24 @@ import History from '@/components/History.vue'
 import { storeToRefs } from 'pinia'
 import { useFileStore } from '@/stores/file'
 import { useSettingsStore } from '@/stores/settings'
+import { ref, watch } from 'vue'
 
 const fileStore = useFileStore()
-const { graphProblemObj } = storeToRefs(fileStore)
 const settingsStore = useSettingsStore()
 const { showTargetOverlap } = storeToRefs(settingsStore)
+const { graphProblemObj } = storeToRefs(fileStore)
+const graphName = ref<string>('')
+watch(graphName, (newName) => {
+  if (graphProblemObj.value) {
+    graphProblemObj.value.name = newName
+  }
+})
 </script>
 
 <template>
   <div class="simulation">
     <input
-      v-if="graphProblemObj"
-      v-model="graphProblemObj.name"
+      v-model="graphName"
       class="graph-problem-name"
       placeholder="untitled"
       @keydown.stop

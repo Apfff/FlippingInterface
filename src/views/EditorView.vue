@@ -2,16 +2,22 @@
 import GraphEditor from '@/components/GraphEditor.vue'
 import { useFileStore } from '@/stores/file'
 import { storeToRefs } from 'pinia'
+import { computed, ref, watch } from 'vue'
 
 const fileStore = useFileStore()
 const { editorGraphObj } = storeToRefs(fileStore)
+const graphName = ref<string>('')
+watch(graphName, (newName) => {
+  if (editorGraphObj.value) {
+    editorGraphObj.value.name = newName
+  }
+})
 </script>
 
 <template>
   <div class="editor">
     <input
-      v-if="editorGraphObj"
-      v-model="editorGraphObj.name"
+      v-model="graphName"
       class="graph-problem-name"
       placeholder="untitled"
       @keydown.stop
