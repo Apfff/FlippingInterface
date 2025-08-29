@@ -13,6 +13,7 @@ export const cyConfig = {
   edgeColorCorrect: '#8ad360',
   edgeWidth: 2,
   wheelSensitivity: 1.5,
+  editorDefaultZoom: 3,
 }
 
 export const appConfig = {

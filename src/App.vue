@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import { useRouter } from 'vue-router'
 import type { GraphProblem } from './types'
 import { useFileStore } from './stores/file'
+import { useModeStore } from './stores/mode'
 import { storeToRefs } from 'pinia'
+import ModeSwitch from '@/components/ModeSwitch.vue'
 
 document.title = 'Flipping Interface'
 
@@ -12,7 +14,17 @@ const router = useRouter()
 const importCounter = ref(0)
 const fileInput = ref<HTMLInputElement | null>(null)
 const fileStore = useFileStore()
-const { graphProblemObj } = storeToRefs(fileStore)
+const { graphProblemObj, editorGraphObj } = storeToRefs(fileStore)
+const modeStore = useModeStore()
+const { currentMode } = storeToRefs(modeStore)
+
+watch(currentMode, (newMode) => {
+  if (newMode === 'editor') {
+    router.push({ name: 'editor' })
+  } else {
+    router.push({ name: 'simulation' })
+  }
+})
 
 const importGraphProblem = () => {
   fileInput.value?.click()
@@ -56,10 +68,18 @@ const downloadGraphProblem = () => {
 
 <template>
   <header>
-    <div></div>
+    <div class="switches">
+      <ModeSwitch />
+    </div>
     <div id="title">Interface</div>
     <div class="buttons">
-      <div class="button" @click="importGraphProblem">import</div>
+      <div
+        class="button"
+        :class="{ disabled: currentMode === 'editor' }"
+        @click="importGraphProblem"
+      >
+        import
+      </div>
       <input
         ref="fileInput"
         type="file"
@@ -67,7 +87,17 @@ const downloadGraphProblem = () => {
         @change="handleFileSelect"
         style="display: none"
       />
-      <div class="button" v-show="graphProblemObj" @click="downloadGraphProblem">download</div>
+      <div
+        class="button"
+        :class="{
+          disabled:
+            (currentMode == 'simulate' && !graphProblemObj) ||
+            (currentMode == 'editor' && !editorGraphObj),
+        }"
+        @click="downloadGraphProblem()"
+      >
+        download
+      </div>
     </div>
   </header>
   <main>
@@ -88,6 +118,12 @@ header {
   display: flex;
   gap: var(--s-xl);
   align-items: center;
+  justify-content: center;
+}
+.switches {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 main {
   padding-top: var(--header-height);
@@ -98,5 +134,10 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 </style>

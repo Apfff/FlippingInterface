@@ -108,7 +108,6 @@ onMounted(() => {
     },
     userZoomingEnabled: true,
     userPanningEnabled: true,
-    boxSelectionEnabled: true,
     autounselectify: false,
     motionBlur: false,
     wheelSensitivity: cyConfig.wheelSensitivity,
