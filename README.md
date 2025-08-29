@@ -1,19 +1,19 @@
 ## How-To-Use
 
-#Simulation
-Graph:  
+### Simulation
+#### Graph:  
 Move graph -> click and drag graph  
 Move node -> click and drag node  
 Select edge -> click edge  
 Flip selected edge -> [space]  
 Show target graph: hold [R]  
 
-Info Tab (Tab on the right):  
+##### Info Tab (Tab on the right):  
 Move through steps: [LeftArrow] / [RightArrow]  
 Highlight nodes/edge: click edge in Steps-History  
 Show overlap (with targert graph): toggle "show overlap"  
 
-#Editor
+### Editor
 Create node -> [space]  
 Select node -> click / shift-click / shift-drag  
 Create edge -> [E] (exactly two nodes must be selected)  
