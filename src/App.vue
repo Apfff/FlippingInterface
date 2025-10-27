@@ -72,31 +72,42 @@ const downloadGraphProblem = () => {
       <ModeSwitch />
     </div>
     <div id="title">Interface</div>
-    <div class="buttons">
-      <div
-        class="button"
-        :class="{ disabled: currentMode === 'editor' }"
-        @click="importGraphProblem"
-      >
-        import
+    <div class="import-export">
+      <div class="buttons">
+        <div
+          class="button"
+          :class="{ disabled: currentMode === 'editor' }"
+          @click="importGraphProblem"
+        >
+          import
+        </div>
+        <input
+          ref="fileInput"
+          type="file"
+          accept=".json,application/json"
+          @change="handleFileSelect"
+          style="display: none"
+        />
+        <div
+          class="button"
+          :class="{
+            disabled:
+              (currentMode == 'simulate' && !graphProblemObj) ||
+              (currentMode == 'editor' && !editorGraphObj),
+          }"
+          @click="downloadGraphProblem()"
+        >
+          download
+        </div>
       </div>
-      <input
-        ref="fileInput"
-        type="file"
-        accept=".json,application/json"
-        @change="handleFileSelect"
-        style="display: none"
-      />
-      <div
-        class="button"
-        :class="{
-          disabled:
-            (currentMode == 'simulate' && !graphProblemObj) ||
-            (currentMode == 'editor' && !editorGraphObj),
-        }"
-        @click="downloadGraphProblem()"
-      >
-        download
+
+      <div class="alternative-json-toggle">
+        (
+        <label>
+          <input type="checkbox" v-model="fileStore.alternativeJson" />
+          Alternative JSON Format
+        </label>
+        )
       </div>
     </div>
   </header>
@@ -114,9 +125,14 @@ header {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
-.buttons {
+.import-export {
   display: flex;
   gap: var(--s-xl);
+  align-items: center;
+}
+.buttons {
+  display: flex;
+  gap: var(--s-l);
   align-items: center;
   justify-content: center;
 }

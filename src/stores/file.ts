@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
-import type { GraphProblem } from '@/types'
+import type { GraphProblem, GraphProblemExport } from '@/types'
 import { useHistoryStore } from './history'
 import { useModeStore } from './mode'
 
@@ -12,6 +12,8 @@ export const useFileStore = defineStore('file', () => {
 
   const graphProblemObj = ref<GraphProblem | null>(null)
   const editorGraphObj = ref<GraphProblem | null>(null)
+
+  const alternativeJson = ref<boolean>(false)
 
   function includeHistory(graphProblem: GraphProblem) {
     if (!graphProblem) return
@@ -38,7 +40,10 @@ export const useFileStore = defineStore('file', () => {
       graphProblem = { ...graphProblemObj.value }
       includeHistory(graphProblem)
     }
-    const jsonString = JSON.stringify(graphProblem, null, 2)
+    const exportObj = alternativeJson.value
+      ? generateGraphProblemExport(graphProblem)
+      : graphProblem
+    const jsonString = JSON.stringify(exportObj, null, 2)
     const blob = new Blob([jsonString], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
@@ -50,5 +55,28 @@ export const useFileStore = defineStore('file', () => {
     URL.revokeObjectURL(url)
   }
 
-  return { graphProblemObj, editorGraphObj, downloadCurrentGraphProblem }
+  function generateGraphProblemExport(graphProblem: GraphProblem): GraphProblemExport {
+    const pointsMap = new Map<string, number>()
+    let i = 0
+    graphProblem.nodes.forEach((node) => {
+      pointsMap.set(node.id, i++)
+    })
+    const content_type = 'APFFF_web_interface'
+    const instance_uid = graphProblem.name
+    const points_x = Array.from(new Set(graphProblem.nodes.map((node) => node.x)))
+    const points_y = Array.from(new Set(graphProblem.nodes.map((node) => node.y)))
+    const triangulations: [number, number][] = graphProblem.startEdges.map((edge) => [
+      pointsMap.get(edge.source)!,
+      pointsMap.get(edge.target)!,
+    ])
+    return {
+      content_type,
+      instance_uid,
+      points_x,
+      points_y,
+      triangulations,
+    }
+  }
+
+  return { graphProblemObj, editorGraphObj, alternativeJson, downloadCurrentGraphProblem }
 })
