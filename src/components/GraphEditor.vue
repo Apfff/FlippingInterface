@@ -115,6 +115,13 @@ onMounted(() => {
         style: {
           width: cyConfig.edgeWidth,
           'line-color': cyConfig.edgeColor,
+          events: 'yes',
+        },
+      },
+      {
+        selector: 'edge.selected',
+        style: {
+          'line-color': cyConfig.nodeColorHighlighted,
         },
       },
     ],
@@ -139,6 +146,16 @@ onMounted(() => {
   cy.on('unselect', 'node', (event) => {
     const node = event.target
     node.removeClass('selected')
+  })
+
+  cy.on('select', 'edge', (event) => {
+    const edge = event.target
+    edge.addClass('selected')
+  })
+
+  cy.on('unselect', 'edge', (event) => {
+    const edge = event.target
+    edge.removeClass('selected')
   })
 
   keyPressHandler = (event: KeyboardEvent) => {
@@ -189,9 +206,14 @@ onMounted(() => {
       event.preventDefault()
       if (!cy) return
       const selectedNodes = cy.nodes(':selected')
+      const selectedEdges = cy.edges(':selected')
       if (selectedNodes.length > 0) {
         selectedNodes.remove()
         renameNodesToAlphabeticalOrder()
+        updateEditorGraphObj()
+      }
+      if (selectedEdges.length > 0) {
+        selectedEdges.remove()
         updateEditorGraphObj()
       }
     }
