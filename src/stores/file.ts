@@ -62,7 +62,7 @@ export const useFileStore = defineStore('file', () => {
       pointsMap.set(node.id, i++)
     })
     const content_type = 'APFFF_web_interface'
-    const instance_uid = graphProblem.name
+    const instance_uid = graphProblem.name || 'untitled_instance'
     const points_x = Array.from(new Set(graphProblem.nodes.map((node) => node.x)))
     const points_y = Array.from(new Set(graphProblem.nodes.map((node) => node.y)))
     const triangulations: [number, number][] = graphProblem.startEdges.map((edge) => [

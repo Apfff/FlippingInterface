@@ -47,8 +47,8 @@ export interface CyElements {
 export type CyElementsArray = CyElement[]
 
 export interface GraphProblemExport {
-  content_type?: string
-  instance_uid?: string
+  content_type: string
+  instance_uid: string
   points_x: number[]
   points_y: number[]
   triangulations: [number, number][]
